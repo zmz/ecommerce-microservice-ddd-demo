@@ -1,0 +1,737 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.5.6</version>
+        <relativePath /> <!-- lookup parent from repository -->
+    </parent>
+
+    <!--父级项目的packaging设置为pom-->
+    <packaging>pom</packaging>
+
+    <groupId>com.ecommerce</groupId>
+    <artifactId>ecommerce-microservice-demo</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>ecommerce-microservice-demo</name>
+    <description>ecommerce-microservice-demo project for Spring Boot</description>
+
+    <!-- 配置版本变量-->
+    <properties>
+        <!-- 为了避免项目环境不一致问题 -->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <compiler.source>1.8</compiler.source>
+        <compiler.target>1.8</compiler.target>
+
+        <java.version>1.8</java.version>
+        <lombok.version>1.18.12</lombok.version>
+        <spring-boot.version>2.5.4</spring-boot.version>
+        <shedlock.version>4.29.0</shedlock.version>
+        <springfox-boot-starter.version>3.0.0</springfox-boot-starter.version>
+        <knife4j.version>3.0</knife4j.version>
+        <validation-api.version>2.0.1.Final</validation-api.version>
+        <spring-retry.version>1.2.5.RELEASE</spring-retry.version>
+        <org.aspectj.version>1.9.6</org.aspectj.version>
+        <spring-amqp.version>2.3.9</spring-amqp.version>
+        <spring-rabbit.version>2.3.10</spring-rabbit.version>
+        <commons-collections4.version>4.4</commons-collections4.version>
+        <google-collections.version>1.0</google-collections.version>
+        <jackson.version>2.12.5</jackson.version>
+        <javax.inject.version>1</javax.inject.version>
+        <spring-dao.version>2.0.8</spring-dao.version>
+        <spring-tx.version>5.3.9</spring-tx.version>
+        <spring-jdbc.version>5.3.9</spring-jdbc.version>
+        <hibernate-core.version>5.5.6</hibernate-core.version>
+        <hibernate-validator.version>7.0.1.Final</hibernate-validator.version>
+        <flyway-maven-plugin.version>6.5.5</flyway-maven-plugin.version>
+        <mariadb-java-client.version>2.7.4</mariadb-java-client.version>
+        <spring-mock-mvc.version>4.3.3</spring-mock-mvc.version>
+        <rest-assured-common.version>4.3.3</rest-assured-common.version>
+
+        <!-- maven 代码扫描插件-->
+        <maven-checkstyle-plugin.version>3.1.0</maven-checkstyle-plugin.version>
+        <maven-pmd-plugin.version>3.13.0</maven-pmd-plugin.version>
+        <maven-jxr-plugin.version>3.0.0</maven-jxr-plugin.version>
+        <p3c-pmd.version>2.0.1</p3c-pmd.version>
+        <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
+        <findbugs-maven-plugin.version>3.0.5</findbugs-maven-plugin.version>
+        <spotbugs-maven-plugin.version>4.0.0</spotbugs-maven-plugin.version>
+        <jacoco-maven-plugin.version>0.8.7</jacoco-maven-plugin.version>
+        <!-- docker 构建使用 -->
+        <maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
+        <docker.repository>192.168.0.7:5000</docker.repository>
+        <docker.registry.name>ecommerce</docker.registry.name>
+        <dockerHost>http://100.93.20.121:2375</dockerHost>
+        <docker-maven-plugin.version>1.2.2</docker-maven-plugin.version>
+    </properties>
+
+
+    <!--主工程包含子模块工厂配置-->
+    <modules>
+        <module>ecommerce-shared-model</module>
+        <module>ecommerce-devops</module>
+        <module>ecommerce-spring-common</module>
+        <module>ecommerce-order-query-service</module>
+        <module>ecommerce-order-service</module>
+        <module>ecommerce-inventory-service</module>
+        <module>ecommerce-product-service</module>
+    </modules>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <scope>runtime</scope>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <!-- 配置依赖关系-->
+    <dependencyManagement>
+        <dependencies>
+            <!-- configure user spring cloud / spring boot versions -->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter</artifactId>
+                <version>${spring-boot.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-web</artifactId>
+                <version>${spring-boot.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-test</artifactId>
+                <version>${spring-boot.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-aop</artifactId>
+                <version>${spring-boot.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-validation</artifactId>
+                <version>${spring-boot.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-devtools</artifactId>
+                <version>${spring-boot.version}</version>
+                <scope>runtime</scope>
+                <optional>true</optional>
+            </dependency>
+
+            <!-- spring framework-->
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-jdbc</artifactId>
+                <version>${spring-jdbc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-tx</artifactId>
+                <version>${spring-tx.version}</version>
+            </dependency>
+
+            <!--spring-retry依赖, 发布领域事件时使用-->
+            <dependency>
+                <groupId>org.springframework.retry</groupId>
+                <artifactId>spring-retry</artifactId>
+                <version>${spring-retry.version}</version>
+            </dependency>
+            <!--aspectjtools依赖, 发布领域事件时使用-->
+            <dependency>
+                <groupId>org.aspectj</groupId>
+                <artifactId>aspectjtools</artifactId>
+                <version>${org.aspectj.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.amqp</groupId>
+                <artifactId>spring-amqp</artifactId>
+                <version>${spring-amqp.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.amqp</groupId>
+                <artifactId>spring-rabbit</artifactId>
+                <version>${spring-rabbit.version}</version>
+            </dependency>
+
+            <!-- hibernate-->
+            <dependency>
+                <groupId>org.hibernate.validator</groupId>
+                <artifactId>hibernate-validator</artifactId>
+                <version>${hibernate-validator.version}</version>
+            </dependency>
+
+            <!-- mariadb-java-client -->
+            <dependency>
+                <groupId>org.mariadb.jdbc</groupId>
+                <artifactId>mariadb-java-client</artifactId>
+                <version>${mariadb-java-client.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.google.collections</groupId>
+                <artifactId>google-collections</artifactId>
+                <version>${google-collections.version}</version>
+            </dependency>
+
+
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-core</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-annotations</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.datatype</groupId>
+                <artifactId>jackson-datatype-jsr310</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>javax.inject</groupId>
+                <artifactId>javax.inject</artifactId>
+                <version>${javax.inject.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-collections4</artifactId>
+                <version>${commons-collections4.version}</version>
+            </dependency>
+
+
+            <!--lombok依赖-->
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>${lombok.version}</version>
+            </dependency>
+
+            <!--轻量级分布式锁依赖-->
+            <dependency>
+                <groupId>net.javacrumbs.shedlock</groupId>
+                <artifactId>shedlock-core</artifactId>
+                <version>${shedlock.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>net.javacrumbs.shedlock</groupId>
+                <artifactId>shedlock-provider-jdbc-template</artifactId>
+                <version>${shedlock.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>net.javacrumbs.shedlock</groupId>
+                <artifactId>shedlock-spring</artifactId>
+                <version>${shedlock.version}</version>
+            </dependency>
+
+            <!--springfox swagger官方Starter-->
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-boot-starter</artifactId>
+                <version>${springfox-boot-starter.version}</version>
+            </dependency>
+            <!--整合Knife4j，优化API文档体验-->
+            <dependency>
+                <groupId>com.github.xiaoymin</groupId>
+                <artifactId>knife4j-spring-boot-starter</artifactId>
+                <version>${knife4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>javax.validation</groupId>
+                <artifactId>validation-api</artifactId>
+                <version>${validation-api.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.flywaydb</groupId>
+                <artifactId>flyway-maven-plugin</artifactId>
+                <version>${flyway-maven-plugin.version}</version>
+            </dependency>
+
+            <!-- apitest -->
+            <dependency>
+                <groupId>io.rest-assured</groupId>
+                <artifactId>spring-mock-mvc</artifactId>
+                <version>${spring-mock-mvc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.rest-assured</groupId>
+                <artifactId>rest-assured-common</artifactId>
+                <version>${rest-assured-common.version}</version>
+            </dependency>
+
+            <!-- **************************代码静态扫描插件*********************  -->
+            <dependency>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>${maven-checkstyle-plugin.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-pmd-plugin</artifactId>
+                <version>${maven-pmd-plugin.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jxr-plugin</artifactId>
+                <version>${maven-jxr-plugin.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba.p3c</groupId>
+                <artifactId>p3c-pmd</artifactId>
+                <version>${p3c-pmd.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven-compiler-plugin.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.github.spotbugs</groupId>
+                <artifactId>spotbugs-maven-plugin</artifactId>
+                <version>${spotbugs-maven-plugin.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.spotify</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+                <version>${docker-maven-plugin.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>findbugs-maven-plugin</artifactId>
+                <version>${findbugs-maven-plugin.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>${jacoco-maven-plugin.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>xml-maven-plugin</artifactId>
+                <version>1.0.2</version>
+            </dependency>
+            <!-- **************************代码静态扫描插件*********************  -->
+        </dependencies>
+
+    </dependencyManagement>
+    <reports>
+        <plugins>
+            <plugin>
+                <inherited>true</inherited>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jxr-plugin</artifactId>
+                <version>${maven-jxr-plugin.version}</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-pmd-plugin</artifactId>
+                <version>${maven-pmd-plugin.version}</version>
+            </plugin>
+            <!-- https://spotbugs.github.io/ -->
+            <!-- https://spotbugs.github.io/spotbugs-maven-plugin/usage.html -->
+            <plugin>
+                <groupId>com.github.spotbugs</groupId>
+                <artifactId>spotbugs-maven-plugin</artifactId>
+                <version>${spotbugs-maven-plugin.version}</version>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>findbugs-maven-plugin</artifactId>
+                <version>${findbugs-maven-plugin.version}</version>
+            </plugin>
+        </plugins>
+    </reports>
+    <build>
+        <pluginManagement>
+            <plugins>
+                <!-- 配置编译插件， 为了避免项目环境不一致问题-->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <configuration>
+                        <source>${compiler.source}</source>
+                        <target>${compiler.target}</target>
+                        <encoding>${project.build.sourceEncoding}</encoding>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                    <configuration>
+                        <excludes>
+                            <exclude>
+                                <groupId>org.projectlombok</groupId>
+                                <artifactId>lombok</artifactId>
+                            </exclude>
+                        </excludes>
+                    </configuration>
+                </plugin>
+                <!-- docker image构建 -->
+                <plugin>
+                    <groupId>com.spotify</groupId>
+                    <artifactId>docker-maven-plugin</artifactId>
+                    <version>${docker-maven-plugin.version}</version>
+                    <executions>
+                        <execution>
+                            <id>build-docker-image</id>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>build</goal>
+                            </goals>
+                        </execution>
+                        <execution>
+                            <id>tag-image</id>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>tag</goal>
+                            </goals>
+                        </execution>
+                        <execution>
+                            <id>push-image</id>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>push</goal>
+                            </goals>
+                            <configuration>
+                                <imageName>
+                                    ${docker.repository}/${docker.registry.name}/${project.artifactId}:${project.version}-${maven.build.timestamp}
+                                </imageName>
+                            </configuration>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <!-- 配置远程docker环境的管理地址-->
+                        <dockerHost>${dockerHost}</dockerHost>
+                        <!--install阶段也上传，否则只有deploy阶段上传-->
+                        <!--                    <pushImage>true</pushImage>-->
+                        <!--https://github.com/spotify/·docker-maven-plugin/issues/227 在plugin中添加image和newName 不然会报错
+                        The parameters 'image', 'newName' for goal com.spotify:docker-maven-plugin:1.2.2:tag are missing or invalid
+                        -->
+                        <image>
+                            ${docker.registry.name}/${project.artifactId}:${project.version}-${maven.build.timestamp}
+                        </image>
+                        <newName>
+                            ${docker.repository}/${docker.registry.name}/${project.artifactId}:${project.version}-${maven.build.timestamp}
+                        </newName>
+
+                        <imageName>
+                            ${docker.registry.name}/${project.artifactId}:${project.version}-${maven.build.timestamp}
+                        </imageName>
+
+                        <dockerDirectory>${project.basedir}/src/main/docker</dockerDirectory>
+                        <!-- dockerfile中传递环境变量 -->
+                        <buildArgs>
+                            <JAR_FILE>${project.build.finalName}.jar</JAR_FILE>
+                        </buildArgs>
+
+                        <resources>
+                            <rescource><!-- 将打包文件放入dockerDirectory指定的位置 -->
+                                <targetPath>/</targetPath>
+                                <directory>${project.build.directory}</directory>
+                                <include>${project.build.finalName}.jar</include>
+                            </rescource>
+                            <!-- 输出Dockerfile至docker文件夹,如果不使用占位符,可使用以下配置 -->
+                            <resource>
+                                <directory>src/main/docker</directory>
+                                <filtering>true</filtering>
+                                <includes>
+                                    <include>**/Dockerfile</include>
+                                </includes>
+                                <targetPath>../docker</targetPath>
+                            </resource>
+                        </resources>
+                    </configuration>
+                </plugin>
+                <!-- 数据库迁移版本管理-->
+                <plugin>
+                    <groupId>org.flywaydb</groupId>
+                    <artifactId>flyway-maven-plugin</artifactId>
+                    <version>${flyway-maven-plugin.version}</version>
+                    <executions>
+                        <execution>
+                            <phase>generate-sources</phase>
+                            <goals>
+                                <goal>migrate</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+
+                    <configuration>
+                        <driver>org.mariadb.jdbc.Driver</driver>
+                        <url>jdbc:mysql://100.93.20.121:13307/ecommerce_product_mysql?allowMultiQueries=true&amp;useUnicode=true&amp;characterEncoding=UTF-8&amp;connectionCollation=utf8mb4_bin&amp;useServerPrepStmts=false&amp;rewriteBatchedStatements=true</url>
+                        <user>root</user>
+                        <password>root</password>
+                        <!--<schemas></schemas>-->
+                    </configuration>
+                </plugin>
+                <!-- 代码样式检测 -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-checkstyle-plugin</artifactId>
+                    <version>${maven-checkstyle-plugin.version}</version>
+                    <executions>
+                        <execution>
+                            <!-- 绑定pmd:pmd到validate生命周期，在validate时会自动进行代码规范检查 -->
+                            <id>validate</id>
+                            <phase>validate</phase>
+                            <configuration>
+                                <!-- 配置文件的路径，在style文件夹下 -->
+                                <configLocation>style/checkstyle.xml</configLocation>
+                                <encoding>UTF-8</encoding>
+                                <consoleOutput>true</consoleOutput>
+                                <failsOnError>true</failsOnError>
+                                <includeTestSourceDirectory>false</includeTestSourceDirectory>
+                            </configuration>
+                            <goals>
+                                <goal>check</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+
+                <!-- findbug插件 -->
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>findbugs-maven-plugin</artifactId>
+                    <version>${findbugs-maven-plugin.version}</version>
+                    <configuration>
+                        <!-- 设置分析工作的等级，可以为Min、Default和Max -->
+                        <effort>Low</effort>
+                        <!-- Low、Medium和High (Low最严格) -->
+                        <threshold>Low</threshold>
+                        <failOnError>true</failOnError>
+                        <includeTests>true</includeTests>
+
+                        <!--findbugs需要忽略的错误的配置文件-->
+                        <!--   <excludeFilterFile>findbugs-exclude-bugs.xml</excludeFilterFile>-->
+                        <findbugsXmlOutputDirectory>
+                            ${project.build.directory}/findbugs
+                        </findbugsXmlOutputDirectory>
+                        <failOnError>false</failOnError>
+                    </configuration>
+                </plugin>
+                <!-- 使用xml-maven-plugin生成findbug.html 先执行findbug，在执行maven verify -->
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>xml-maven-plugin</artifactId>
+                    <version>1.0.2</version>
+                    <executions>
+                        <execution>
+                            <phase>verify</phase>
+                            <goals>
+                                <goal>transform</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <transformationSets>
+                            <transformationSet>
+                                <dir>${project.build.directory}/findbugs</dir>
+                                <outputDir>${project.build.directory}/findbugs</outputDir>
+                                <stylesheet>fancy-hist.xsl</stylesheet>
+                                <!--<stylesheet>default.xsl</stylesheet>-->
+                                <!--<stylesheet>plain.xsl</stylesheet>-->
+                                <!--<stylesheet>fancy.xsl</stylesheet>-->
+                                <!--<stylesheet>summary.xsl</stylesheet>-->
+                                <fileMappers>
+                                    <fileMapper
+                                        implementation="org.codehaus.plexus.components.io.filemappers.FileExtensionMapper">
+                                        <targetExtension>.html</targetExtension>
+                                    </fileMapper>
+                                </fileMappers>
+                            </transformationSet>
+                        </transformationSets>
+                    </configuration>
+                    <dependencies>
+                        <dependency>
+                            <groupId>com.google.code.findbugs</groupId>
+                            <artifactId>findbugs</artifactId>
+                            <version>3.0.1</version>
+                        </dependency>
+                    </dependencies>
+                </plugin>
+
+                <!-- pmd静态扫描-->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-pmd-plugin</artifactId>
+                    <version>${maven-pmd-plugin.version}</version>
+                    <configuration>
+                        <rulesets>
+                            <ruleset>/category/java/bestpractices.xml</ruleset>
+                        </rulesets>
+                        <printFailingErrors>true</printFailingErrors>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>pmd-check-verify</id>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>check</goal>
+                            </goals>
+                        </execution>
+                        <execution>
+                            <id>pmd-pmd-site</id>
+                            <phase>site</phase>
+                            <goals>
+                                <goal>cpd</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <!-- p3c依赖 这里面有pmd依赖的默认配置，要加入 -->
+                    <dependencies>
+                        <dependency>
+                            <groupId>com.alibaba.p3c</groupId>
+                            <artifactId>p3c-pmd</artifactId>
+                            <version>${p3c-pmd.version}</version>
+                        </dependency>
+                    </dependencies>
+                </plugin>
+
+                <!--检测代码覆盖率的插件jacoco-->
+                <plugin>
+                    <groupId>org.jacoco</groupId>
+                    <artifactId>jacoco-maven-plugin</artifactId>
+                    <version>${jacoco-maven-plugin.version}</version>
+                    <executions>
+                        <execution>
+                            <id>prepare-agent</id>
+                            <goals>
+                                <goal>prepare-agent</goal>
+                            </goals>
+                            <configuration>
+                                <destFile>
+                                    ${project.build.directory}/jacoco.exec
+                                </destFile>
+                                <propertyName>surefireArgLine</propertyName>
+                            </configuration>
+                        </execution>
+                        <execution>
+                            <id>check</id>
+                            <goals>
+                                <goal>check</goal>
+                            </goals>
+                        </execution>
+                        <execution>
+                            <id>report</id>
+                            <phase>prepare-package</phase>
+                            <goals>
+                                <goal>report</goal>
+                            </goals>
+                        </execution>
+                        <!--
+                              在程序的verify阶段，执行report测试的程序。
+                              文件的输入为perpare-agent阶段中设置或者默认的jacoco.exec.
+                              参数 includes和excludes可用来选定report中过滤的类。
+                              -->
+                        <execution>
+                            <id>default-report</id>
+                            <phase>test</phase>
+                            <goals>
+                                <goal>report</goal>
+                            </goals>
+                            <configuration>
+                                <dataFile>${project.build.directory}/jacoco.exec</dataFile>
+                                <outputDirectory>${project.reporting.outputDirectory}/jacoco</outputDirectory>
+                            </configuration>
+                        </execution>
+                    </executions>
+
+                    <!--这个配置规则会影响编译结果，一般也不会要求这么严格，可以把他注释掉-->
+                    <configuration>
+                        <!-- rules里面指定覆盖规则 -->
+                        <rules>
+                            <rule implementation="org.jacoco.maven.RuleConfiguration">
+                                <element>BUNDLE</element>
+                                <limits>
+                                    <!-- 指定方法覆盖到80% -->
+                                    <limit implementation="org.jacoco.report.check.Limit">
+                                        <counter>METHOD</counter>
+                                        <value>COVEREDRATIO</value>
+                                        <minimum>0.80</minimum>
+                                    </limit>
+                                    <!-- 指定指令覆盖到80% -->
+                                    <limit implementation="org.jacoco.report.check.Limit">
+                                        <counter>INSTRUCTION</counter>
+                                        <value>COVEREDRATIO</value>
+                                        <minimum>0.80</minimum>
+                                    </limit>
+                                    <!-- 指定行覆盖到80% -->
+                                    <limit implementation="org.jacoco.report.check.Limit">
+                                        <counter>LINE</counter>
+                                        <value>COVEREDRATIO</value>
+                                        <minimum>0.80</minimum>
+                                    </limit>
+                                    <!-- 指定类覆盖到100%，不能遗失任何类 -->
+                                    <limit implementation="org.jacoco.report.check.Limit">
+                                        <counter>CLASS</counter>
+                                        <value>MISSEDCOUNT</value>
+                                        <maximum>0</maximum>
+                                    </limit>
+                                </limits>
+                            </rule>
+                        </rules>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-pmd-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>com.github.spotbugs</groupId>
+                <artifactId>spotbugs-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>findbugs-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>xml-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

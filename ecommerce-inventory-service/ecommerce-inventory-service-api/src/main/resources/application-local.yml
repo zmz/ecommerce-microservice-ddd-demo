@@ -1,0 +1,28 @@
+buildNumber: unknown
+buildTime: unknown
+gitRevision: unknown
+gitBranch: unknown
+
+spring:
+  datasource:
+    url: jdbc:mysql://100.93.20.121:13308/ecommerce_inventory_mysql?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&connectionCollation=utf8mb4_bin&useServerPrepStmts=false&rewriteBatchedStatements=true
+    driverClassName: org.mariadb.jdbc.Driver
+    username: root
+    password: root
+  rabbitmq:
+    host: 100.93.20.121
+    port: 5672
+    virtual-host: /
+    username: rabbitmq-user
+    password: rabbitmq-password
+
+
+ecommerce:
+  rabbit:
+    publishX: inventory-publish-x
+    publishDlx: inventory-publish-dlx
+    publishDlq: inventory-publish-dlq
+    receiveQ: inventory-receive-q
+    receiveDlx: inventory-receive-dlx
+    receiveDlq: inventory-receive-dlq
+    receiveRecoverX: inventory-receive-recover-x

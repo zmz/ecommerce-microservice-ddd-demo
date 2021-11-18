@@ -1,0 +1,5 @@
+spring.application.name: ecommerce-inventory-service-api
+spring.zipkin.baseUrl: http://100.93.20.121:9411
+spring.zipkin.sender.type: web
+spring.sleuth.sampler.probability: 1.0
+spring.main.allow-bean-definition-overriding: true
